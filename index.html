@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>川渝之旅</title>
+  <meta name="description" content="川渝之旅 · 四川与重庆的影像记录。点击照片查看拍摄地点。">
+  <meta property="og:title" content="川渝之旅">
+  <meta property="og:description" content="四川 · 重庆 影像记录">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 加载屏 -->
+  <div id="loading-screen"><div class="loading-text">稍候片刻</div></div>
+
+  <!-- 顶部标题 -->
+  <header id="site-header">
+    <h1 id="site-title">川渝之旅<span class="dot">.</span></h1>
+    <p class="site-sub">四川 · 重庆 影像记录</p>
+  </header>
+
+  <!-- 漂浮照片云：JS 从 data.js 填充 -->
+  <main id="universe" aria-label="照片云，点击照片查看拍摄地点"></main>
+
+  <!-- 聚焦时显示拍摄地点 -->
+  <div id="caption" aria-live="polite"></div>
+
+  <!-- 菜单：只留 随机 / 无障碍查看 -->
+  <nav id="menu" aria-label="菜单">
+    <button type="button" id="btn-random" aria-label="随机重排照片">随机</button>
+    <a href="accessible.html" id="btn-accessible">无障碍查看</a>
+  </nav>
+
+  <div id="copyright">© 2026 川渝之旅</div>
+
+  <script src="js/data.js"></script>
+  <script src="js/cloud.js"></script>
+</body>
+</html>

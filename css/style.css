@@ -1,0 +1,194 @@
+/* ============================================================
+   川渝之旅 · 样式
+   暖调暗色 + 漂浮照片云
+   ============================================================ */
+
+:root {
+  --bg:      #15110e;   /* 暖近黑背景 */
+  --bg-2:    #1d1611;
+  --ink:     #efe6da;   /* 暖白文字 */
+  --muted:   #b1a08e;   /* 次要文字 */
+  --line:    rgba(239, 230, 218, 0.16);
+  --accent:  #d98a5b;   /* 赤陶暖橙 */
+  --accent-2:#a23b2e;   /* 川渝赤红 */
+  --shadow:  0 18px 50px rgba(0, 0, 0, 0.55);
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+               "Hiragino Sans GB", "Source Han Sans SC", sans-serif;
+  --font-serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: radial-gradient(120% 90% at 50% 0%, #221a14 0%, var(--bg) 60%);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body { overflow: hidden; }            /* 首页：云占满屏 */
+body.scroll { overflow: auto; }       /* 无障碍页：允许滚动 */
+
+img { -webkit-user-drag: none; user-select: none; }
+button { font-family: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------- 加载屏 ---------- */
+#loading-screen {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  transition: opacity 0.8s ease;
+}
+#loading-screen.hide { opacity: 0; pointer-events: none; }
+.loading-text {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 4vw, 34px);
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
+
+/* ---------- 顶部标题 ---------- */
+#site-header {
+  position: fixed; top: clamp(18px, 4vw, 40px); left: clamp(18px, 4vw, 44px);
+  z-index: 50; pointer-events: none;
+}
+#site-title {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 5vw, 46px);
+  font-weight: 700; letter-spacing: 0.16em; line-height: 1;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+#site-title .dot { color: var(--accent); }
+.site-sub {
+  margin-top: 10px; font-size: clamp(11px, 1.6vw, 13px);
+  letter-spacing: 0.42em; color: var(--muted);
+}
+
+/* ---------- 图片云 ---------- */
+#universe {
+  position: fixed; inset: 0; z-index: 10;
+  overflow: hidden;
+}
+.photo {
+  position: absolute; top: 0; left: 0;
+  will-change: transform;
+  cursor: pointer;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+  line-height: 0;
+}
+.photo img {
+  display: block;
+  width: clamp(110px, 13vw, 200px);
+  height: auto;
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+  outline: 1px solid rgba(255,255,255,0.05);
+  transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
+}
+.photo:hover { filter: brightness(1.08); z-index: 500 !important; }
+.photo:hover img { transform: scale(1.06); }
+
+/* 聚焦：某张放大居中，其余淡出 */
+#universe.has-focus .photo:not(.focused) {
+  opacity: 0.12; filter: blur(2px) brightness(0.6); pointer-events: none;
+}
+.photo.focused {
+  position: fixed; left: 50%; top: 50%; z-index: 1000;
+  transform: translate(-50%, -50%) !important;
+  cursor: zoom-out;
+}
+.photo.focused img {
+  width: auto; height: auto;
+  max-width: min(88vw, 1150px);
+  max-height: 80vh;
+  border-radius: 4px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+  transform: none;
+}
+
+/* ---------- 聚焦说明（拍摄地点） ---------- */
+#caption {
+  position: fixed; left: 50%; bottom: clamp(86px, 12vh, 120px);
+  transform: translateX(-50%) translateY(12px);
+  z-index: 1100; text-align: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#caption.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#caption .cap-loc {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 4vw, 36px);
+  letter-spacing: 0.14em;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.8);
+}
+#caption .cap-region {
+  display: inline-block; margin-top: 10px;
+  font-size: 12px; letter-spacing: 0.4em; color: var(--accent);
+  padding: 4px 14px; border: 1px solid var(--line); border-radius: 999px;
+}
+#caption .cap-hint { display:block; margin-top:14px; font-size:11px; letter-spacing:0.3em; color:var(--muted); }
+
+/* ---------- 菜单（只留 随机 / 无障碍查看） ---------- */
+#menu {
+  position: fixed; right: clamp(18px, 4vw, 44px); bottom: clamp(22px, 5vh, 40px);
+  z-index: 60; display: flex; gap: 14px; align-items: center;
+}
+#menu button, #menu a {
+  font-size: 13px; letter-spacing: 0.18em;
+  padding: 11px 22px; border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(20, 16, 12, 0.55);
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+#menu button:hover, #menu a:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #1a120c;
+}
+
+/* ---------- 版权 ---------- */
+#copyright {
+  position: fixed; left: clamp(18px, 4vw, 44px); bottom: clamp(22px, 5vh, 40px);
+  z-index: 50; font-size: 11px; letter-spacing: 0.2em; color: var(--muted);
+  pointer-events: none;
+}
+
+/* ============================================================
+   无障碍查看页 (accessible.html)
+   ============================================================ */
+.acc-wrap { max-width: 1180px; margin: 0 auto; padding: clamp(24px, 6vw, 70px) clamp(18px, 5vw, 40px) 120px; }
+.acc-top { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 8px; }
+.acc-title { font-family: var(--font-serif); font-size: clamp(28px, 6vw, 52px); letter-spacing: 0.12em; }
+.acc-title .dot { color: var(--accent); }
+.acc-back {
+  font-size: 13px; letter-spacing: 0.18em; padding: 10px 20px;
+  border: 1px solid var(--line); border-radius: 999px; transition: all 0.25s ease;
+}
+.acc-back:hover { border-color: var(--accent); background: var(--accent); color: #1a120c; }
+.acc-intro { color: var(--muted); letter-spacing: 0.06em; margin-bottom: 40px; line-height: 1.9; }
+.acc-intro b { color: var(--ink); font-weight: 600; }
+
+.acc-region { font-family: var(--font-serif); font-size: clamp(22px, 4vw, 32px); letter-spacing: 0.2em; margin: 54px 0 6px; }
+.acc-region::after { content: ""; display: block; width: 46px; height: 3px; background: var(--accent); margin-top: 14px; border-radius: 2px; }
+
+.acc-loc { font-size: 16px; letter-spacing: 0.16em; color: var(--ink); margin: 38px 0 16px; display: flex; align-items: center; gap: 12px; }
+.acc-loc .count { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; }
+.acc-loc .vtag { font-size: 11px; color: var(--accent); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; letter-spacing: 0.1em; }
+
+.acc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.acc-item { background: var(--bg-2); border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.acc-item img, .acc-item video { display: block; width: 100%; height: 220px; object-fit: cover; background: #000; }
+.acc-item figcaption { padding: 10px 12px; font-size: 12px; letter-spacing: 0.08em; color: var(--muted); display: flex; justify-content: space-between; }
+.acc-item figcaption .t { color: var(--ink); }
+
+@media (max-width: 600px) {
+  .acc-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .acc-item img, .acc-item video { height: 150px; }
+  .photo img { width: clamp(86px, 26vw, 130px); }
+}
