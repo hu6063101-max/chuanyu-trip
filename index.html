@@ -33,9 +33,16 @@
     <a href="accessible.html" id="btn-accessible">无障碍查看</a>
   </nav>
 
-  <div id="copyright">© 2026 川渝之旅</div>
+  <!-- 背景音乐 -->
+  <button type="button" id="btn-music" aria-pressed="false" aria-label="播放背景音乐">
+    <span class="icon">♪</span>
+  </button>
+  <audio id="bgm" src="audio/bgm.mp3" loop preload="none"></audio>
+
+  <div id="copyright">忆2023.7 川渝之旅</div>
 
   <script src="js/data.js"></script>
   <script src="js/cloud.js"></script>
+  <script src="js/music.js"></script>
 </body>
 </html>
